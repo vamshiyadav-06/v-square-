@@ -16,6 +16,7 @@ async function loadProfile(user) {
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(emptyAuth);
   const [students, setStudents] = useState([]);
+  const [consultations, setConsultations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -23,6 +24,7 @@ export function AuthProvider({ children }) {
     if (!session?.user) {
       setAuth(emptyAuth);
       setStudents([]);
+      setConsultations([]);
       return;
     }
 
@@ -49,6 +51,22 @@ export function AuthProvider({ children }) {
     }
 
     setStudents(data || []);
+  };
+
+  const loadConsultations = async () => {
+    if (!supabase || auth.role !== 'admin') return;
+
+    const { data, error: queryError } = await supabase
+      .from('consultation_requests')
+      .select('id, name, phone, email, project_idea, technology, deadline, message, status, created_at')
+      .order('created_at', { ascending: false });
+
+    if (queryError) {
+      setError(queryError.message);
+      return;
+    }
+
+    setConsultations(data || []);
   };
 
   useEffect(() => {
@@ -84,9 +102,11 @@ export function AuthProvider({ children }) {
     if (!supabase || auth.role !== 'admin') return undefined;
 
     loadStudents();
+    loadConsultations();
     const channel = supabase
       .channel('admin-student-profiles')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, loadStudents)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'consultation_requests' }, loadConsultations)
       .subscribe();
 
     return () => {
@@ -121,6 +141,25 @@ export function AuthProvider({ children }) {
     return { ok: true, role: 'student' };
   };
 
+  const submitConsultation = async (requestData) => {
+    if (!supabase || !auth.user) return { ok: false, message: 'Please log in before contacting V Square.' };
+
+    const { error: requestError } = await supabase.from('consultation_requests').insert({
+      student_id: auth.user.id,
+      name: requestData.name,
+      phone: requestData.phone,
+      email: auth.user.email,
+      college: requestData.college,
+      project_idea: requestData.projectIdea,
+      technology: requestData.technology,
+      deadline: requestData.deadline,
+      message: requestData.message,
+    });
+
+    if (requestError) return { ok: false, message: requestError.message };
+    return { ok: true };
+  };
+
   const login = async ({ email, password }) => {
     if (!supabase) return { ok: false, message: 'Supabase is not configured.' };
 
@@ -151,8 +190,8 @@ export function AuthProvider({ children }) {
   };
 
   const value = useMemo(
-    () => ({ auth, login, logout, registerStudent, students, loading, error, isSupabaseConfigured }),
-    [auth, students, loading, error],
+    () => ({ auth, login, logout, registerStudent, submitConsultation, students, consultations, loading, error, isSupabaseConfigured }),
+    [auth, students, consultations, loading, error],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

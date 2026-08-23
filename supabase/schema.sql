@@ -13,8 +13,25 @@ create table if not exists public.profiles (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.consultation_requests (
+  id uuid primary key default gen_random_uuid(),
+  student_id uuid not null references public.profiles(id) on delete cascade,
+  name text not null,
+  phone text not null,
+  email text not null,
+  college text not null default '',
+  project_idea text not null,
+  technology text not null default '',
+  deadline text not null default '',
+  message text not null,
+  status text not null default 'new' check (status in ('new', 'reviewing', 'in_progress', 'completed', 'closed')),
+  created_at timestamptz not null default now()
+);
+
 alter table public.profiles enable row level security;
 alter table public.profiles replica identity full;
+alter table public.consultation_requests enable row level security;
+alter table public.consultation_requests replica identity full;
 
 create or replace function public.is_admin()
 returns boolean
@@ -47,6 +64,25 @@ on public.profiles for update
 to authenticated
 using (id = auth.uid() or public.is_admin())
 with check (id = auth.uid() or public.is_admin());
+
+drop policy if exists "Students can create their consultation requests" on public.consultation_requests;
+create policy "Students can create their consultation requests"
+on public.consultation_requests for insert
+to authenticated
+with check (student_id = auth.uid());
+
+drop policy if exists "Students can read their consultation requests" on public.consultation_requests;
+create policy "Students can read their consultation requests"
+on public.consultation_requests for select
+to authenticated
+using (student_id = auth.uid() or public.is_admin());
+
+drop policy if exists "Admins can update consultation requests" on public.consultation_requests;
+create policy "Admins can update consultation requests"
+on public.consultation_requests for update
+to authenticated
+using (public.is_admin())
+with check (public.is_admin());
 
 create or replace function public.handle_new_user()
 returns trigger
@@ -87,6 +123,12 @@ begin
     where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'profiles'
   ) then
     alter publication supabase_realtime add table public.profiles;
+  end if;
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'consultation_requests'
+  ) then
+    alter publication supabase_realtime add table public.consultation_requests;
   end if;
 end;
 $$;
