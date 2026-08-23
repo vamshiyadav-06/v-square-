@@ -64,7 +64,7 @@ function RegisterPage() {
         setSuccess('Registration successful. Check your email to confirm your account, then log in.');
       } else {
         setSuccess('Registration successful. You are now logged in.');
-        navigate('/dashboard');
+        navigate('/contact');
       }
     } finally {
       setSubmitting(false);

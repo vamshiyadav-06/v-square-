@@ -9,7 +9,6 @@ import ReferralPage from './pages/ReferralPage';
 import ContactPage from './pages/ContactPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import ReferralsPage from './pages/ReferralsPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
@@ -37,7 +36,6 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['student']}><DashboardPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute allowedRoles={['student']}><ProfilePage /></ProtectedRoute>} />
         <Route path="/referrals" element={<ProtectedRoute allowedRoles={['student']}><ReferralsPage /></ProtectedRoute>} />
         <Route path="/projects/:id" element={<ProtectedRoute allowedRoles={['student']}><ProjectDetailPage /></ProtectedRoute>} />

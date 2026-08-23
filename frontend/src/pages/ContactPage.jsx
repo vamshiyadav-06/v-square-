@@ -51,7 +51,7 @@ function ContactPage() {
     }
 
     setForm(initialForm);
-    setStatus({ type: 'success', message: 'Your consultation request has been sent.' });
+    setStatus({ type: 'success', message: 'Thank you. One of our team members will contact you within 24 hours.' });
   };
 
   return (
@@ -103,6 +103,17 @@ function ContactPage() {
             </div>
           </form>
           {status.message && <div className="notice" style={{ color: status.type === 'error' ? '#fca5a5' : '#86efac' }}>{status.message}</div>}
+          {status.type === 'success' && (
+            <a
+              className="btn btn-primary"
+              href="https://wa.me/918074720619?text=Filled%20the%20Details"
+              target="_blank"
+              rel="noreferrer"
+              style={{ display: 'inline-flex', marginTop: 14 }}
+            >
+              Need a faster reply on WhatsApp
+            </a>
+          )}
         </div>
       </div>
     </section>

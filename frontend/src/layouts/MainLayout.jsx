@@ -50,7 +50,7 @@ function MainLayout() {
                 {auth.role === 'admin' ? (
                   <Link className="btn btn-secondary" to="/admin">Admin Dashboard</Link>
                 ) : (
-                  <Link className="btn btn-secondary" to="/dashboard">Dashboard</Link>
+                  <Link className="btn btn-secondary" to="/contact">Project Details</Link>
                 )}
                 <button className="btn btn-ghost" onClick={handleLogout} type="button">
                   <LogOut size={16} style={{ marginRight: 6 }} />
