@@ -11,19 +11,7 @@ function AdminMessagesPage() {
             <strong>Messages</strong>
           </div>
           <div className="table-body">
-            <table className="simple-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Message</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Neha</td><td>9876543210</td><td>Need a career guidance AI dashboard.</td><td><span className="badge warning">New</span></td></tr>
-              </tbody>
-            </table>
+            <p style={{ margin: 0, color: '#dfe7ef' }}>No consultation messages are available yet.</p>
           </div>
         </div>
       </div>

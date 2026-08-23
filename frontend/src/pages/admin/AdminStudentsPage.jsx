@@ -1,4 +1,8 @@
+import { useAuth } from '../../context/AuthContext';
+
 function AdminStudentsPage() {
+  const { students } = useAuth();
+
   return (
     <section className="page-hero">
       <div className="container">
@@ -11,20 +15,34 @@ function AdminStudentsPage() {
             <strong>Students</strong>
           </div>
           <div className="table-body">
-            <table className="simple-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Course</th>
-                  <th>City</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Riya</td><td>riya@example.com</td><td>B.Tech</td><td>Hyderabad</td></tr>
-                <tr><td>Arjun</td><td>arjun@example.com</td><td>M.Tech</td><td>Chennai</td></tr>
-              </tbody>
-            </table>
+            {students.length === 0 ? (
+              <p style={{ margin: 0, color: '#dfe7ef' }}>No registered students found.</p>
+            ) : (
+              <table className="simple-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Course</th>
+                    <th>College</th>
+                    <th>City</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {students.map((student) => (
+                    <tr key={student.id || student.email}>
+                      <td>{student.fullName}</td>
+                      <td>{student.email}</td>
+                      <td>{student.phone}</td>
+                      <td>{student.course}</td>
+                      <td>{student.college}</td>
+                      <td>{student.city}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>

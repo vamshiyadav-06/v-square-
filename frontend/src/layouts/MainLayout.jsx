@@ -1,6 +1,7 @@
-import { Link, NavLink, Outlet } from 'react-router-dom';
-import { Menu, MessageCircle, Phone, Mail } from 'lucide-react';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Menu, MessageCircle, Phone, Mail, LogOut } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const navItems = [
   { to: '/', label: 'Home' },
@@ -15,6 +16,13 @@ const navItems = [
 
 function MainLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { auth, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <>
@@ -37,8 +45,24 @@ function MainLayout() {
           </nav>
 
           <div className="header-actions">
-            <Link className="btn btn-secondary" to="/login">Student Login</Link>
-            <Link className="btn btn-primary" to="/register">Start Your Project</Link>
+            {auth.user ? (
+              <>
+                {auth.role === 'admin' ? (
+                  <Link className="btn btn-secondary" to="/admin">Admin Dashboard</Link>
+                ) : (
+                  <Link className="btn btn-secondary" to="/dashboard">Dashboard</Link>
+                )}
+                <button className="btn btn-ghost" onClick={handleLogout} type="button">
+                  <LogOut size={16} style={{ marginRight: 6 }} />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link className="btn btn-secondary" to="/login">Student Login</Link>
+                <Link className="btn btn-primary" to="/register">Start Your Project</Link>
+              </>
+            )}
             <button className="btn btn-ghost mobile-nav" onClick={() => setMenuOpen((prev) => !prev)} aria-label="Toggle menu">
               <Menu size={18} />
             </button>

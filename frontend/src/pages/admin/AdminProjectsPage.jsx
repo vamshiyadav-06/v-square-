@@ -11,20 +11,7 @@ function AdminProjectsPage() {
             <strong>Projects</strong>
           </div>
           <div className="table-body">
-            <table className="simple-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th>Progress</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>AI Study Assistant</td><td><span className="badge warning">Development</span></td><td>60%</td><td>₹6,000</td></tr>
-                <tr><td>Campus Portal</td><td><span className="badge success">Completed</span></td><td>100%</td><td>₹5,000</td></tr>
-              </tbody>
-            </table>
+            <p style={{ margin: 0, color: '#dfe7ef' }}>No project records are available yet.</p>
           </div>
         </div>
       </div>

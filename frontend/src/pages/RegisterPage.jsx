@@ -1,4 +1,76 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
+const initialForm = {
+  fullName: '',
+  email: '',
+  phone: '',
+  password: '',
+  college: '',
+  course: '',
+  branch: '',
+  year: '1st Year',
+  city: '',
+};
+
 function RegisterPage() {
+  const navigate = useNavigate();
+  const { registerStudent } = useAuth();
+  const [form, setForm] = useState(initialForm);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const requiredFields = ['fullName', 'email', 'phone', 'password', 'college', 'course', 'branch', 'year', 'city'];
+    const missing = requiredFields.some((field) => !String(form[field]).trim());
+
+    if (missing) {
+      setError('Please fill in all required fields.');
+      setSuccess('');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError('Please enter a valid email address.');
+      setSuccess('');
+      return;
+    }
+
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      setSuccess('');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const result = await registerStudent(form);
+      if (!result.ok) {
+        setError(result.message);
+        setSuccess('');
+        return;
+      }
+
+      setError('');
+      if (result.requiresEmailConfirmation) {
+        setSuccess('Registration successful. Check your email to confirm your account, then log in.');
+      } else {
+        setSuccess('Registration successful. You are now logged in.');
+        navigate('/dashboard');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <section className="page-hero">
       <div className="container">
@@ -7,38 +79,38 @@ function RegisterPage() {
           <h2>Create your student account</h2>
         </div>
         <div className="form-shell">
-          <form className="form-grid">
+          <form className="form-grid" onSubmit={handleSubmit}>
             <div className="form-field">
               <label>Full Name</label>
-              <input type="text" placeholder="Your full name" />
+              <input name="fullName" type="text" value={form.fullName} onChange={handleChange} placeholder="Your full name" />
             </div>
             <div className="form-field">
               <label>Email</label>
-              <input type="email" placeholder="name@college.edu" />
+              <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="name@college.edu" />
             </div>
             <div className="form-field">
               <label>Phone Number</label>
-              <input type="tel" placeholder="9876543210" />
+              <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="9876543210" />
             </div>
             <div className="form-field">
               <label>Password</label>
-              <input type="password" placeholder="Strong password" />
+              <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="Strong password" />
             </div>
             <div className="form-field">
               <label>College Name</label>
-              <input type="text" placeholder="College or university" />
+              <input name="college" type="text" value={form.college} onChange={handleChange} placeholder="College or university" />
             </div>
             <div className="form-field">
               <label>Course</label>
-              <input type="text" placeholder="B.Tech, M.Tech, Diploma" />
+              <input name="course" type="text" value={form.course} onChange={handleChange} placeholder="B.Tech, M.Tech, Diploma" />
             </div>
             <div className="form-field">
               <label>Branch</label>
-              <input type="text" placeholder="Computer Science" />
+              <input name="branch" type="text" value={form.branch} onChange={handleChange} placeholder="Computer Science" />
             </div>
             <div className="form-field">
               <label>Year</label>
-              <select>
+              <select name="year" value={form.year} onChange={handleChange}>
                 <option>1st Year</option>
                 <option>2nd Year</option>
                 <option>3rd Year</option>
@@ -49,13 +121,16 @@ function RegisterPage() {
             </div>
             <div className="form-field full">
               <label>City</label>
-              <input type="text" placeholder="Your city" />
+              <input name="city" type="text" value={form.city} onChange={handleChange} placeholder="Your city" />
             </div>
             <div className="full">
-              <button className="btn btn-primary" type="button">Register</button>
+              <button className="btn btn-primary" type="submit" disabled={submitting}>
+                {submitting ? 'Creating account...' : 'Register'}
+              </button>
             </div>
           </form>
-          <div className="notice">This registration experience is designed to integrate with Supabase Auth and secure profile creation.</div>
+          {error && <div className="notice" style={{ color: '#fca5a5' }}>{error}</div>}
+          {success && <div className="notice" style={{ color: '#86efac' }}>{success}</div>}
         </div>
       </div>
     </section>

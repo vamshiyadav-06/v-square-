@@ -1,13 +1,17 @@
-const cards = [
-  { label: 'Total Students', value: '126' },
-  { label: 'New Requests', value: '08' },
-  { label: 'Active Projects', value: '42' },
-  { label: 'Completed Projects', value: '31' },
-  { label: 'Pending Payments', value: '06' },
-  { label: 'Total Referrals', value: '28' },
-];
+import { useAuth } from '../../context/AuthContext';
 
 function AdminDashboardPage() {
+  const { students } = useAuth();
+
+  const cards = [
+    { label: 'Total Students', value: String(students.length) },
+    { label: 'New Requests', value: String(students.length) },
+    { label: 'Active Projects', value: '0' },
+    { label: 'Completed Projects', value: '0' },
+    { label: 'Pending Payments', value: '0' },
+    { label: 'Total Referrals', value: '0' },
+  ];
+
   return (
     <section className="page-hero">
       <div className="container">
@@ -27,23 +31,37 @@ function AdminDashboardPage() {
 
         <div className="table-card">
           <div className="table-header">
-            <strong>Recent project requests</strong>
+            <strong>Registered students</strong>
           </div>
           <div className="table-body">
-            <table className="simple-table">
-              <thead>
-                <tr>
-                  <th>Student</th>
-                  <th>Project</th>
-                  <th>Status</th>
-                  <th>Budget</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Riya</td><td>AI Feedback System</td><td><span className="badge warning">New Request</span></td><td>₹6,000</td></tr>
-                <tr><td>Arjun</td><td>Smart Inventory</td><td><span className="badge neutral">Development</span></td><td>₹5,000</td></tr>
-              </tbody>
-            </table>
+            {students.length === 0 ? (
+              <p style={{ margin: 0, color: '#dfe7ef' }}>No students registered yet.</p>
+            ) : (
+              <table className="simple-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>College</th>
+                    <th>Course</th>
+                    <th>City</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {students.map((student) => (
+                    <tr key={student.id || student.email}>
+                      <td>{student.fullName}</td>
+                      <td>{student.email}</td>
+                      <td>{student.phone}</td>
+                      <td>{student.college}</td>
+                      <td>{student.course}</td>
+                      <td>{student.city}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>

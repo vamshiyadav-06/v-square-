@@ -67,10 +67,12 @@ cp .env.example .env
 ## Supabase setup
 
 1. Create a Supabase project.
-2. Add the public URL and anon key to the frontend environment variables.
-3. Add the service role key to backend environment variables.
-4. Set up the database tables and enable Row Level Security.
-5. Create the first admin user in Supabase and assign the `admin` role in the profiles table.
+2. Run [`supabase/schema.sql`](supabase/schema.sql) in the Supabase SQL Editor.
+3. Add the public URL and anon key to `frontend/.env`.
+4. Create `v2squareconsole@gmail.com` in Supabase Authentication > Users, then assign its profile `role` to `admin` using the UUID shown by Supabase. The password is never stored in the app or profiles table.
+5. Enable realtime for `public.profiles` if the SQL Editor does not enable it automatically.
+
+The admin student list queries `public.profiles` and listens for database changes, so newly registered students appear without a page refresh. Row Level Security allows students to access only their own profile and admins to read student profiles.
 
 ## Render deployment
 

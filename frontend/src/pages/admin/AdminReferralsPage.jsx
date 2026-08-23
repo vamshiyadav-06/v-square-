@@ -11,20 +11,7 @@ function AdminReferralsPage() {
             <strong>Referral records</strong>
           </div>
           <div className="table-body">
-            <table className="simple-table">
-              <thead>
-                <tr>
-                  <th>Referrer</th>
-                  <th>Student</th>
-                  <th>Status</th>
-                  <th>Reward</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Riya</td><td>Meghana</td><td><span className="badge success">Successful</span></td><td>₹200</td></tr>
-                <tr><td>Arjun</td><td>Sam</td><td><span className="badge neutral">Pending</span></td><td>₹200</td></tr>
-              </tbody>
-            </table>
+            <p style={{ margin: 0, color: '#dfe7ef' }}>No referral records are available yet.</p>
           </div>
         </div>
       </div>

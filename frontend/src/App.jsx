@@ -21,6 +21,7 @@ import AdminMessagesPage from './pages/admin/AdminMessagesPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -36,16 +37,16 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/referrals" element={<ReferralsPage />} />
-        <Route path="/projects/:id" element={<ProjectDetailPage />} />
-        <Route path="/admin" element={<AdminDashboardPage />} />
-        <Route path="/admin/students" element={<AdminStudentsPage />} />
-        <Route path="/admin/projects" element={<AdminProjectsPage />} />
-        <Route path="/admin/referrals" element={<AdminReferralsPage />} />
-        <Route path="/admin/messages" element={<AdminMessagesPage />} />
-        <Route path="/admin/settings" element={<AdminSettingsPage />} />
+        <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['student']}><DashboardPage /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute allowedRoles={['student']}><ProfilePage /></ProtectedRoute>} />
+        <Route path="/referrals" element={<ProtectedRoute allowedRoles={['student']}><ReferralsPage /></ProtectedRoute>} />
+        <Route path="/projects/:id" element={<ProtectedRoute allowedRoles={['student']}><ProjectDetailPage /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboardPage /></ProtectedRoute>} />
+        <Route path="/admin/students" element={<ProtectedRoute allowedRoles={['admin']}><AdminStudentsPage /></ProtectedRoute>} />
+        <Route path="/admin/projects" element={<ProtectedRoute allowedRoles={['admin']}><AdminProjectsPage /></ProtectedRoute>} />
+        <Route path="/admin/referrals" element={<ProtectedRoute allowedRoles={['admin']}><AdminReferralsPage /></ProtectedRoute>} />
+        <Route path="/admin/messages" element={<ProtectedRoute allowedRoles={['admin']}><AdminMessagesPage /></ProtectedRoute>} />
+        <Route path="/admin/settings" element={<ProtectedRoute allowedRoles={['admin']}><AdminSettingsPage /></ProtectedRoute>} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
