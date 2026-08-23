@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const initialForm = {
@@ -131,6 +131,9 @@ function RegisterPage() {
           </form>
           {error && <div className="notice" style={{ color: '#fca5a5' }}>{error}</div>}
           {success && <div className="notice" style={{ color: '#86efac' }}>{success}</div>}
+          <div className="notice" style={{ marginTop: 12 }}>
+            Already have an account? <Link to="/login">Login here</Link>
+          </div>
         </div>
       </div>
     </section>

@@ -59,8 +59,8 @@ function MainLayout() {
               </>
             ) : (
               <>
-                <Link className="btn btn-secondary" to="/login">Student Login</Link>
-                <Link className="btn btn-primary" to="/register">Start Your Project</Link>
+                <Link className="btn btn-secondary" to="/login">Login</Link>
+                <Link className="btn btn-primary" to="/register">Register</Link>
               </>
             )}
             <button className="btn btn-ghost mobile-nav" onClick={() => setMenuOpen((prev) => !prev)} aria-label="Toggle menu">

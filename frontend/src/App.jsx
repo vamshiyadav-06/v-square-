@@ -34,7 +34,7 @@ function App() {
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/referral" element={<ReferralPage />} />
-        <Route path="/contact" element={<ProtectedRoute allowedRoles={['student']}><ContactPage /></ProtectedRoute>} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['student']}><DashboardPage /></ProtectedRoute>} />

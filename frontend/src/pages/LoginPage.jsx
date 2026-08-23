@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function LoginPage() {
@@ -57,6 +57,9 @@ function LoginPage() {
 
           <div className="notice" style={{ marginTop: 18 }}>
             Admin access is limited to the secure V Square console account.
+          </div>
+          <div className="notice" style={{ marginTop: 12 }}>
+            New student? <Link to="/register">Create your account</Link>
           </div>
         </div>
       </div>

@@ -1,13 +1,38 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const initialForm = { name: '', phone: '', college: '', projectIdea: '', technology: '', deadline: '', message: '' };
 
 function ContactPage() {
-  const { auth, submitConsultation } = useAuth();
+  const { auth, loading, submitConsultation } = useAuth();
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState({ type: '', message: '' });
   const [submitting, setSubmitting] = useState(false);
+
+  if (loading) {
+    return <section className="page-hero"><div className="container"><div className="notice">Checking your account...</div></div></section>;
+  }
+
+  if (!auth.user || auth.role !== 'student') {
+    return (
+      <section className="page-hero">
+        <div className="container">
+          <div className="section-head">
+            <div className="eyebrow">Student consultation</div>
+            <h1>Login first to contact V Square</h1>
+          </div>
+          <div className="form-shell">
+            <div className="notice">Only registered students can send a consultation request. Login if you already have an account, or register to continue.</div>
+            <div className="hero-actions" style={{ marginTop: 20 }}>
+              <Link to="/login" className="btn btn-primary">Login</Link>
+              <Link to="/register" className="btn btn-secondary">Register</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const handleChange = (event) => {
     const { name, value } = event.target;
